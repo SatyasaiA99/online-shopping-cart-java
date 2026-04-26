@@ -1,12 +1,13 @@
 pipeline {
     agent any
+
     environment {
         DOCKERHUB_USER = 'satyasaia99'
         DOCKERHUB_IMAGE = 'onlineshopping'
         DOCKERHUB_TAG = 'v1'
         SONARQUBE_ENV = 'sq'
-        NEXUS_REPO = 'maven-releases'
     }
+
     stages {
 
         stage('Checkout') {
@@ -20,28 +21,41 @@ pipeline {
                 sh 'mvn clean package -DskipTests'
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh 'mvn sonar:sonar'
+                    sh 'mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN'
                 }
             }
         }
 
         stage('Quality Gate') {
             steps {
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
-        stage('JENKINS TO NEXUS') {
+
+        stage('Deploy to Nexus') {
             steps {
-              withMaven(globalMavenSettingsConfig: 'settings.xml', jdk: 'jdk21', maven: 'maven3', traceability: true) {
-             sh 'mvn deploy'
-             }
+                withMaven(globalMavenSettingsConfig: 'settings.xml',
+                          jdk: 'jdk21',
+                          maven: 'maven3') {
+                    sh 'mvn deploy'
+                }
             }
-        }   
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                docker build -t ${DOCKERHUB_USER}/${DOCKERHUB_IMAGE}:${DOCKERHUB_TAG} .
+                """
+            }
+        }
+
         stage('Push to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'Docker',
