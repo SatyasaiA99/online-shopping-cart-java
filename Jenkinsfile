@@ -4,7 +4,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/SatyasaiA99/hotstarjava.git'
+                git branch: 'master', url: 'https://github.com/SatyasaiA99/online-shopping-cart-java.git'
             }
         }
 
