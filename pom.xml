@@ -14,8 +14,8 @@
 
     <!-- 🔥 SonarQube properties -->
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
         <sonar.projectKey>shopping-cart</sonar.projectKey>
         <sonar.projectName>Shopping Cart</sonar.projectName>
@@ -25,12 +25,12 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>http://13.206.122.55:8081/repository/maven-releases/</url>
+            <url>http://15.207.84.151:8081/repository/maven-releases/</url>
         </repository>
 
         <snapshotRepository>
             <id>maven-snapshots</id>
-            <url>http://13.206.122.55:8081/repository/maven-snapshots/</url>
+            <url>http://15.207.84.151:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
