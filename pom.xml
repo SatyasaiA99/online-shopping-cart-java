@@ -6,19 +6,7 @@
 	<packaging>war</packaging>
 	<name>Shopping Cart</name>
 	<description>A Shopping Cart Project in Java by Bitter Code</description>
-	<distributionManagement>
-    <repository>
-        <id>maven-releases</id>
-        <url>http://localhost:8081/repository/maven-releases/</url>
-    </repository>
-
-    <snapshotRepository>
-        <id>maven-snapshots</id>
-        <url>http://localhost:8081/repository/maven-snapshots/</url>
-    </snapshotRepository>
-</distributionManagement>
-
-
+	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -47,6 +35,17 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+    <repository>
+        <id>maven-releases</id>
+        <url>http://localhost:8081/repository/maven-releases/</url>
+    </repository>
+
+    <snapshotRepository>
+        <id>maven-snapshots</id>
+        <url>http://localhost:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+</distributionManagement>
 
 	<dependencies>
 		<dependency>
