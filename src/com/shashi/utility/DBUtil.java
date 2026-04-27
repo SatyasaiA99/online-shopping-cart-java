@@ -8,74 +8,63 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DBUtil {
-	private static Connection conn;
 
-	public DBUtil() {
-	}
+    private static Connection conn;
 
-	public static Connection provideConnection() {
+    public static Connection provideConnection() {
 
-		try {
-			if (conn == null || conn.isClosed()) {
-				ResourceBundle rb = ResourceBundle.getBundle("application");
-				String connectionString = rb.getString("db.connectionString");
-				String driverName = rb.getString("db.driverName");
-				String username = rb.getString("db.username");
-				String password = rb.getString("db.password");
-				try {
-					Class.forName(driverName);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-				conn = DriverManager.getConnection(connectionString, username, password);
+        try {
+            if (conn == null || conn.isClosed()) {
 
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+                System.out.println("🔍 Loading DB properties...");
 
-		return conn;
-	}
+                // Load application.properties
+                ResourceBundle rb = ResourceBundle.getBundle("application");
 
-	public static void closeConnection(Connection con) {
-		/*
-		 * try { if (con != null && !con.isClosed()) {
-		 * 
-		 * con.close(); } } catch (SQLException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-	}
+                String connectionString = rb.getString("db.connectionString");
+                String driverName = rb.getString("db.driverName");
+                String username = rb.getString("db.username");
+                String password = rb.getString("db.password");
 
-	public static void closeConnection(ResultSet rs) {
-		try {
-			if (rs != null && !rs.isClosed()) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+                System.out.println("DB URL: " + connectionString);
+                System.out.println("DB USER: " + username);
 
-	public static void closeConnection(PreparedStatement ps) {
-		try {
-			if (ps != null && !ps.isClosed()) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+                // Load Driver
+                Class.forName(driverName);
+
+                // Create Connection
+                conn = DriverManager.getConnection(connectionString, username, password);
+
+                System.out.println("✅ Database Connected Successfully!");
+
+            }
+        } catch (Exception e) {
+            System.out.println("❌ DB Connection Failed!");
+            e.printStackTrace();
+        }
+
+        return conn;
+    }
+
+    // Close ResultSet
+    public static void closeConnection(ResultSet rs) {
+        try {
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Close PreparedStatement
+    public static void closeConnection(PreparedStatement ps) {
+        try {
+            if (ps != null && !ps.isClosed()) {
+                ps.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
