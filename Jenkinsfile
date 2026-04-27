@@ -78,7 +78,7 @@ pipeline {
                 kubectl apply -f Deployment.yml
                 kubectl apply -f Service.yml
 
-                kubectl rollout status deployment/hotstar-deployment
+                kubectl rollout status deployment/onlineshopping-deployment
                 '''
             }
         }
