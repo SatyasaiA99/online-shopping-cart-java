@@ -69,5 +69,19 @@ pipeline {
         }
     }
 }
+ stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                sh '''
+                echo "🚀 Deploying to Kubernetes..."
+
+                kubectl apply -f Deployment.yml
+                kubectl apply -f Service.yml
+
+                kubectl rollout status deployment/hotstar-deployment
+                '''
+            }
+        }
+    }       
     }
 }
