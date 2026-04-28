@@ -11,6 +11,7 @@ public class DBUtil {
 
     private static Connection conn;
 
+    // ✅ Get Connection
     public static Connection provideConnection() {
 
         try {
@@ -18,7 +19,6 @@ public class DBUtil {
 
                 System.out.println("🔍 Loading DB properties...");
 
-                // Load application.properties
                 ResourceBundle rb = ResourceBundle.getBundle("application");
 
                 String connectionString = rb.getString("db.connectionString");
@@ -29,14 +29,11 @@ public class DBUtil {
                 System.out.println("DB URL: " + connectionString);
                 System.out.println("DB USER: " + username);
 
-                // Load Driver
                 Class.forName(driverName);
 
-                // Create Connection
                 conn = DriverManager.getConnection(connectionString, username, password);
 
                 System.out.println("✅ Database Connected Successfully!");
-
             }
         } catch (Exception e) {
             System.out.println("❌ DB Connection Failed!");
@@ -46,7 +43,7 @@ public class DBUtil {
         return conn;
     }
 
-    // Close ResultSet
+    // ✅ Close ResultSet
     public static void closeConnection(ResultSet rs) {
         try {
             if (rs != null && !rs.isClosed()) {
@@ -57,11 +54,22 @@ public class DBUtil {
         }
     }
 
-    // Close PreparedStatement
+    // ✅ Close PreparedStatement
     public static void closeConnection(PreparedStatement ps) {
         try {
             if (ps != null && !ps.isClosed()) {
                 ps.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ✅🔥 THIS IS THE MISSING METHOD (VERY IMPORTANT)
+    public static void closeConnection(Connection conn) {
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
