@@ -11,7 +11,7 @@ public class DBUtil {
 
     private static Connection conn;
 
-    // ✅ Get Connection
+    // ✅ Get Connection (FIXED VERSION)
     public static Connection provideConnection() {
 
         try {
@@ -21,23 +21,30 @@ public class DBUtil {
 
                 ResourceBundle rb = ResourceBundle.getBundle("application");
 
-                String connectionString = rb.getString("db.connectionString");
-                String driverName = rb.getString("db.driverName");
-                String username = rb.getString("db.username");
-                String password = rb.getString("db.password");
+                String url = rb.getString("db.connectionString");
+                String driver = rb.getString("db.driverName");
+                String user = rb.getString("db.username");
+                String pass = rb.getString("db.password");
 
-                System.out.println("DB URL: " + connectionString);
-                System.out.println("DB USER: " + username);
+                System.out.println("DB URL: " + url);
+                System.out.println("DB USER: " + user);
 
-                Class.forName(driverName);
+                // Load Driver
+                Class.forName(driver);
 
-                conn = DriverManager.getConnection(connectionString, username, password);
+                // Create Connection
+                conn = DriverManager.getConnection(url, user, pass);
 
-                System.out.println("✅ Database Connected Successfully!");
+                System.out.println("✅ DB Connected Successfully!");
             }
+
         } catch (Exception e) {
-            System.out.println("❌ DB Connection Failed!");
+
+            System.out.println("❌ DB CONNECTION FAILED (CHECK CONFIG)");
             e.printStackTrace();
+
+            // 🔥 IMPORTANT: STOP HERE IF DB FAILS
+            throw new RuntimeException("Database connection failed", e);
         }
 
         return conn;
@@ -65,7 +72,7 @@ public class DBUtil {
         }
     }
 
-    // ✅🔥 THIS IS THE MISSING METHOD (VERY IMPORTANT)
+    // ✅ Close Connection
     public static void closeConnection(Connection conn) {
         try {
             if (conn != null && !conn.isClosed()) {
